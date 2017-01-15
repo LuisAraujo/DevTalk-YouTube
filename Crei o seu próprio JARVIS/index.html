@@ -1,0 +1,93 @@
+<html>
+<head>
+    <script src="artyom.js"></script>
+</head>
+<body>
+<span id="textout">
+
+</span>
+<script>
+
+    var config = {
+        lang:'pt',
+        continuous: true,
+        debug: false,
+        listen:true,
+        obeyKeyword:'start'
+    };
+
+    artyom.initialize(config);
+
+    var funcSaudacao = {
+        indexes: ["Olá","Bom dia"],
+        action: function(i){
+            if(i==0){
+                artyom.sayRandom(["Oi","Tudo ok","Estava te esperando"]);
+            }else if(i==1){
+                artyom.say("Bom dia!",{
+                    onStart:function(){
+                      artyom.fatality();
+                      artyom.dontObey();
+
+                    },
+                    onEnd: function(){
+                        artyom.initialize(config);
+                    }
+                });
+            }
+
+        }
+    };
+
+    var funcTime = {
+        indexes: ["Que horas são"],
+        action: function(i){
+            if(i==0){
+                data = new Date();
+                horas = data.getHours();
+                minutos = data.getMinutes();
+                artyom.say("São "+horas+" e "+minutos+"minutos");
+            }
+        }
+    };
+
+
+    var funcPagina = {
+        indexes: ["Abra meu *"],
+        smart:true,
+        action: function(i, str){
+
+            if((str=="facebook") || (str=="Facebook")){
+               artyom.say("Abrir Facebook");
+               window.open("https://www.facebook.com","_blank");
+            }else if((str=="gmail") || (str=="Gmail")){
+                artyom.say("Abrir Gmail");
+                window.open("https://www.google.com/gmail/","_blank");
+            }
+
+        }
+    };
+
+
+    artyom.redirectRecognizedTextOutput(function(text, EhFinal){
+        var spam = document.getElementById("textout");
+
+        if(EhFinal){
+            spam.innerHTML = text;
+        }else{
+            spam.innerHTML = spam.innerHTML+'.';
+        }
+
+
+    });
+
+    artyom.addCommands(funcSaudacao);
+    artyom.addCommands(funcTime);
+    artyom.addCommands(funcPagina);
+
+
+    //artyom.fatality();
+
+</script>
+</body>
+</html>
