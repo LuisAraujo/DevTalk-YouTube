@@ -1,0 +1,80 @@
+html, body{
+    width: 100%;
+    height: 100%;
+}
+
+#output{
+    width: 50%;
+    height: 20px;
+    padding: 10px;
+    border: 1px solid #e7e7e7;
+    display: block;
+    border-radius: 4px;
+    background-color: #fafafa;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+}
+#mic{
+    position: absolute;
+    z-index: 9999;
+    top: calc(50% - 80px);
+    margin-left: calc(50% - 60px);
+    width: 80px;
+    height: 80px;
+    background-color: #f73838;
+    border-radius: 80px; padding: 10px;
+    background-image: url("../img/bt-microphone.png");
+    background-size: contain;
+
+}
+
+
+.mic2{
+    width: 40px !important;
+    height: 40px !important;
+    position: relative;
+    top: -20px;
+
+}
+#mic:hover{
+    cursor: pointer;
+    background-color: #fff;
+    background-image: url("../img/bt-microphone-rec.png");
+}
+
+
+
+#mic .icon{
+    display:block;
+    width: 50%;
+    height: 50%;
+    background-image: url("../img/bt-microphone.png");
+    background-size: contain;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25%;
+}
+#mic:hover .icon{
+    cursor: pointer;
+
+}
+
+#header{
+    background-color: #000;
+    width: 100%;
+    height: 40px;
+    color: #fff;
+    font-size: 30px;
+    padding-top: 10px;
+}
+
+#conteiner-output{
+    background-color: #efefef;
+    height: 70%;
+    position: relative;
+    width: 100%;
+    padding-top: 10%;
+
+}
+

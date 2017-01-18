@@ -1,0 +1,153 @@
+<html>
+<head>
+<title>My Voice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="Luis Araujo">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="script/artyom/artyom.min.js"></script>
+<link href="style/reset.css" rel="stylesheet">
+<link href="style/myvoice.css" rel="stylesheet">
+
+
+</head>
+<body>
+<div id="header">
+   
+</div>
+
+<div>
+    <span id="output"></span>
+    <div id="mic"></div>
+</div>
+
+
+
+<script>
+	var time = 0;
+	var ativo = false;
+
+    var configArtyom ={
+        lang:'pt',
+        continuous: true,
+        debug:true,
+        listen:true
+    };
+
+    var comandoSaudacao = {
+        description:"Saudação",
+        indexes:["Olá","oi","Quem é você"],
+        action:function(i){
+            fnComandoSaudacao(i);
+        }
+    };
+
+    var comandoSobre = {
+        description:"Informacao sobre dia",
+        indexes:["Que horas são"],
+        action:function(i){
+           fnComandoSobre(i);
+        }
+    };
+
+    var comandoRedeSocial =         {
+        description:"Comando de Rede Social",
+       indexes: ["Abra meu *"],
+        smart:true,
+        action: function(i, str){
+          fnRedeSocial(i, str);
+        }
+    };
+
+artyom.redirectRecognizedTextOutput(function(text,isFinal){
+	var span =  document.getElementById("output");
+
+	if(isFinal){
+		span.innerHTML = text;
+	}else{
+		span.innerHTML = span.innerHTML+".";
+	}
+});
+	
+function fnRedeSocial(i, str){
+	if((str=="facebook") || (str=="Facebook")){
+	   artyom.say("Abrir Facebook");
+	   window.open("https://www.facebook.com","_blank");
+	}else if((str=="gmail") || (str=="Gmail")){
+		artyom.say("Abrir Gmail");
+		window.open("https://www.google.com/gmail/","_blank");
+	}
+}
+
+function fnComandoSobre(i){
+    ultimoComando = "sobre";
+    if(i == 0){
+        currentTime = new Date();
+        hours = currentTime.getHours();
+        mim = currentTime.getMinutes();
+        artyom.say("São "+hours+" horas e "+mim+" minutos.");
+
+    }
+};
+
+function fnComandoSaudacao(i){
+
+    ultimoComando = "saudacao";
+    if ( (i == 0) || (i==1)){
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        if( (hours >= 0 && hours < 4) || (hours >= 18 && hours <= 23)){
+            artyom.say("Boa noite!");
+        }else if(hours >= 4 && hours< 12){
+            artyom.say("Bom dia!");
+        }else if(hours >= 12 && hours< 18){
+            artyom.say("Boa tarde!");
+        }
+    }else if(i == 2){
+        artyom.say("Meu nome é Zigmund. Eu sou um sistema automático baseado em comando de voz. Estou na versao 0 ponto 1");
+    }
+
+};
+
+	
+function startArtyom(time){
+	$("body").css("backgroundColor","#f73838");
+	ativo = true;
+	artyom.initialize(configArtyom);
+	if(time == 0){
+		artyom.sayRandom(["Estou pronto!","Olá","Como vai?","Bem-vindo!","Oi"]);
+	}
+}
+
+
+function stopArtyom(){
+	ativo = false;
+	$("body").css("backgroundColor","#fff");
+	console.log("close");
+	artyom.fatality();
+}
+
+   
+artyom.addCommands(comandoSobre);
+artyom.addCommands(comandoRedeSocial);
+artyom.addCommands(comandoSaudacao);
+
+	
+$(document).ready(function(){
+	$("#mic").click(function(){
+		if(ativo == false){
+			startArtyom(time++);
+		}else{
+			stopArtyom();
+		}
+	});
+});
+
+
+
+
+</script>
+
+<script src="https://apis.google.com/js/client.js"></script>
+</body>
+</html>
