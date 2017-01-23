@@ -13,10 +13,14 @@ http://adf.ly/15732941/crie-o-seu-prprio-jarvis
 ## Criando uma interface para o J.AR.V.I.S*
 [sem video ainda]
 
-##API GMAIL para o seu JARVIS
+##API GMAIL para o seu JARVIS PARTE I
 http://adf.ly/15732941/api-gmail-parte-i
 
+##API GMAIL para o seu JARVIS PARTE II*
+http://
 
+##INTEGRANDO JARVIS COM A API GMAIL*
+http://
 ____
 \* tem código no github
 
