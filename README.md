@@ -5,13 +5,17 @@ DevTalks são vídeos sobre temas diversos de programação, mostrando testes, i
 Se inscreve no canal (https://www.youtube.com/channel/UCoPp8u_wwIk7LqUhd0RnHmg)
 
 ## Testando meu J.A.R.V.I.S em Javascript
-https://www.youtube.com/watch?v=PLgVQtCdxSE
+http://adf.ly/15732941/testando-meu-jarvis-em-javascript
 
 ## Crie o seu próprio J.A.R.V.I.S*
-https://www.youtube.com/channel/UCoPp8u_wwIk7LqUhd0RnHmg
+http://adf.ly/15732941/crie-o-seu-prprio-jarvis
 
 ## Criando uma interface para o J.AR.V.I.S*
 [sem video ainda]
+
+##API GMAIL para o seu JARVIS
+http://adf.ly/15732941/api-gmail-parte-i
+
 
 ____
 \* tem código no github
