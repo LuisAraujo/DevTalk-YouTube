@@ -16,8 +16,8 @@ http://adf.ly/15732941/crie-o-seu-prprio-jarvis
 ##API GMAIL para o seu JARVIS PARTE I
 http://adf.ly/15732941/api-gmail-parte-i
 
-##API GMAIL para o seu JARVIS PARTE II*
-http://
+##API GMAIL para o seu JARVIS PARTE FINAL
+http://adf.ly/15732941/git-api-gmail-ii
 
 ##INTEGRANDO JARVIS COM A API GMAIL*
 http://

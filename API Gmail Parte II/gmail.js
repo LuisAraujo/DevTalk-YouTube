@@ -1,9 +1,8 @@
-
 var scopes = 'https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/gmail.send';
 
 // 1 Passo - Chama a função para setar o APIKey
 function carregarAPI() {
-
+    console.log(clientId, ap)
     gapi.client.setApiKey(apiKey);
     //verifica a autorização do usuário
     window.setTimeout(verificaAutenticacao, 1);
@@ -13,19 +12,19 @@ function carregarAPI() {
 function verificaAutenticacao() {
 
     gapi.auth.authorize({
-	    //seu id
+        //seu id
         client_id: clientId,
-		//escopos, ou seja, o que você quer acessar
+        //escopos, ou seja, o que você quer acessar
         scope: scopes,
-		//imagina que já tenha sido autorizado...
+        //imagina que já tenha sido autorizado...
         immediate: true
     }, function(authResult){
         //tem permissão? Sim :)
         if(authResult && !authResult.error) {
             //faz a sua bagaceira, moleque!
-			loadGmailApi();
+            loadGmailApi();
         }else{
-		    //se não tem, chama a autenticação com immediate: false
+            //se não tem, chama a autenticação com immediate: false
             verificaAutenticacao2();
         }
     });
@@ -36,7 +35,7 @@ function verificaAutenticacao2(){
     gapi.auth.authorize({
         client_id: clientId,
         scope: scopes,
-		//só muda isso!!!
+        //só muda isso!!!
         immediate: false
     });
 }
@@ -45,8 +44,8 @@ function verificaAutenticacao2(){
 function loadGmailApi() {
     //Por algum motivo só funciona assim, achei a solução depois de muuuuito fuçar na net
     gapi.client.setApiKey("");
-	//nome da api, versão, função após o inicio
-    gapi.client.load('gmail', 'v1', deleteThread);
+    //nome da api, versão, função após o inicio
+    gapi.client.load('gmail', 'v1', getListThreads);
 }
 
 //Listar
@@ -63,7 +62,7 @@ function getListLabels(){
 function createLabels(){
     var request = gapi.client.gmail.users.labels.create({
         'userId': 'me',
-         'resource': {
+        'resource': {
             'name': 'newLabelName',
             labelListVisibility: 'labelShow',
             messageListVisibility: 'show'
@@ -82,7 +81,7 @@ function createLabels(){
 function updateLabels(){
     var request = gapi.client.gmail.users.labels.update({
         'userId': 'me',
-		//aqui você diz o id que deseja (na sua conta será um id diferente)
+        //aqui você diz o id que deseja (na sua conta será um id diferente)
         'id': 'Label_39',
         'resource': {
             'id': 'Label_39',
@@ -103,7 +102,7 @@ function updateLabels(){
 function deleteLabels(){
     var request = gapi.client.gmail.users.labels.delete({
         'userId': 'me',
-	    //aqui você diz o id que deseja (na sua conta será um id diferente)
+        //aqui você diz o id que deseja (na sua conta será um id diferente)
         'id': 'Label_39'
     });
 
@@ -180,15 +179,15 @@ function getListEmails2(){
             result = resp.messages;
             console.log(result);
             var nextPageToken = resp.nextPageToken;
-              if(nextPageToken){
-                  request = gapi.client.gmail.users.messages.list({
-                      'userId': userId,
-                      'pageToken': nextPageToken,
-                      'q': query
-                  });
+            if(nextPageToken){
+                request = gapi.client.gmail.users.messages.list({
+                    'userId': userId,
+                    'pageToken': nextPageToken,
+                    'q': query
+                });
 
-                  showListEmails(request, result);
-              }
+                showListEmails(request, result);
+            }
         });
     }
     showListEmails(request, []);
@@ -305,7 +304,7 @@ function deleteEmail(){
 //Listar todos
 function getListThreads(){
     userId = 'me'
-    query = listquery.de+" is:unread";
+    query = "is:unread";
 
     var request = gapi.client.gmail.users.threads.list({
         'userId': 'me',

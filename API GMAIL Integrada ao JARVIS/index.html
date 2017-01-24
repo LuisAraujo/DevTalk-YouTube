@@ -1,0 +1,168 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Luis Araujo">
+    <script src="script/credencial.js"></script>
+    <script src="script/gmail.js"></script>
+    <script src="script/artyom/artyom.min.js"></script>
+    <link href="style/reset.css" rel="stylesheet">
+    <link href="style/myvoice.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+<div id="header"></div>
+
+<div>
+    <span id="output"></span>
+    <div id="mic"></div>
+</div>
+
+
+
+
+<script>
+    var databaseApp = new Object();
+    databaseApp.ultimoComando = "";
+    databaseApp.listEmail = [];
+    databaseApp.listThreads = [];
+    databaseApp.gmailAtivo = false;
+    databaseApp.ativo = false;
+    databaseApp.time = 0;
+
+    var configArtyom ={
+        lang:'pt',
+        continuous: true,
+        debug:false,
+        listen:true
+    };
+
+    var funcGmail = {
+        indexes: ["Verifique meu Gmail", "Liste todos"],
+        action: function(i){
+
+            //caso o serviço não esteja ativo...
+            if(databaseApp.gmailAtivo == false){
+
+                artyom.say("Desculpe, o serviço do Gmail ainda não está ativo");
+
+            }else  if(i==0){
+                //seta o nome do comando
+                databaseApp.ultimoComando = "vergmail";
+                //falas para o usuário
+                artyom.say("Ok! Verificar Gmail");
+                artyom.say("Um momento!");
+
+
+                //API GMAIL (e-mails não lidos)
+                query = "label:inbox is:unread ";
+
+                //limpa lista de e-mails
+                databaseApp.listThreads = [];
+
+                //isso aqui você já sabe... senão, volta ao vído da API GMAIL Parte I
+                var request = gapi.client.gmail.users.threads.list({
+                    'userId': 'me',
+                    'q': query
+
+                });
+
+                getEmaislUnRead(request, []);
+
+            }else if(i==1){
+                //se o ultimo comando for o vergamail
+                if(databaseApp.ultimoComando == "vergmail"){
+                    databaseApp.ultimoComando = "listargmail";
+                    artyom.say("Ok! Listar email");
+                    artyom.say("Um momento!");
+
+                    for(var i=0; i< databaseApp.listThreads.length; i++){
+
+                        var request = gapi.client.gmail.users.threads.get({
+                            'userId': 'me',
+                            'id': databaseApp.listThreads[i].id
+                        });
+
+                        sayEmailsUnRead(request);
+                    }
+                }
+            }
+
+        }
+    };
+
+    //Função separa por requere o modo smart
+    var funcGmail2 = {
+        indexes: ["abra o número *"],
+        smart: true,
+        action: function(i, busca){
+            indice = parseInt(busca);
+            if( !isNaN(indice) ){
+
+                //caso o serviço não esteja ativo...
+                if( databaseApp.ultimoComando == "listargmail"){
+                    openEmail(databaseApp.listEmail[indice-1].id);
+                }else{
+                    artyom.say("Desculpa! Não é possível relaizar esse comando.")
+                }
+
+            }else{
+                artyom.say("Desculpa! Não entendi qual email deseja!")
+            }
+        }
+    };
+
+
+    artyom.redirectRecognizedTextOutput(function(text,isFinal){
+        var span =  document.getElementById("output");
+
+        if(isFinal){
+            span.innerHTML = text;
+        }else{
+            span.innerHTML = span.innerHTML+".";
+        }
+    });
+
+
+    function startArtyom(time){
+
+        $("body").css("backgroundColor","#f73838");
+        databaseApp.ativo = true;
+        artyom.initialize(configArtyom);
+        if(time == 0){
+            artyom.sayRandom(["Estou pronto!","Olá","Como vai?","Bem-vindo!","Oi"]);
+        }
+    }
+
+
+    function stopArtyom(){
+        databaseApp.ativo = false;
+        $("body").css("backgroundColor","#fff");
+        console.log("close");
+        artyom.fatality();
+    }
+
+    artyom.addCommands(funcGmail);
+    artyom.addCommands(funcGmail2);
+
+    $(document).ready(function(){
+        $("#mic").click(function(){
+            if(databaseApp.ativo == false){
+                //Carrega a API do GMAIL
+                carregarAPI();
+                //Inicia o Artyom
+                startArtyom(databaseApp.time++);
+            }else{
+                //Para o Artyom
+                stopArtyom();
+            }
+        });
+    });
+
+</script>
+
+<script src="https://apis.google.com/js/client.js?"></script>
+</body>
+</html>
